@@ -22,7 +22,7 @@ allprojects {
     java {
         toolchain {
             // minimum Java version to compile all subprojects
-            languageVersion = JavaLanguageVersion.of(25)
+            languageVersion = JavaLanguageVersion.of(21)
         }
     }
 

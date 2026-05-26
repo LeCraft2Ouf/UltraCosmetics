@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.subcommands.*;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.util.Problem;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -66,6 +67,29 @@ public class CommandManager implements CommandExecutor {
                 SubCommandTroubleshoot.sendSupportMessage(sender);
                 return true;
             }
+        }
+
+        if (label.equalsIgnoreCase("cosmetics")) {
+            if (!(sender instanceof Player player)) {
+                MessageManager.send(sender, "Not-Allowed-From-Console");
+                return true;
+            }
+            if (!sender.hasPermission(menu.getPermission())) {
+                sendNoPermissionMessage(sender);
+                return true;
+            }
+            if (!SettingsManager.isAllowedWorld(player.getWorld())) {
+                MessageManager.send(sender, "World-Disabled");
+                return true;
+            }
+            if (!Category.EFFECTS.isEnabled()) {
+                MessageManager.send(sender, "Disabled-Command-Message");
+                return true;
+            }
+            ultraCosmetics.getMenus()
+                    .getCategoryMenu(Category.EFFECTS)
+                    .open(ultraCosmetics.getPlayerManager().getUltraPlayer(player), 1);
+            return true;
         }
 
         if (args.length == 0) {
